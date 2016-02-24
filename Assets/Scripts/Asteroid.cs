@@ -5,7 +5,7 @@ public class Asteroid : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Object[] textures = Resources.LoadAll ("img/Meteors", typeof(Sprite));
+		Object[] textures = Resources.LoadAll("images/Meteors/", typeof(Sprite));
 		Sprite texture = (Sprite)textures[Random.Range(0, textures.Length)];
 		this.GetComponent<SpriteRenderer>().sprite = texture;
 		this.gameObject.AddComponent<PolygonCollider2D>();
