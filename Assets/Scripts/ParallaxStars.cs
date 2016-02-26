@@ -45,7 +45,7 @@ public class ParallaxStars : MonoBehaviour {
 	}
 
 	// updateStars is called on camera position change
-	public void updateStars () {
+	public void Update () {
 		Vector2 currentPos = new Vector2(parent.transform.position.x, parent.transform.position.y);
 		Vector2 diff = new Vector2(lastParentPos.x - currentPos.x, lastParentPos.y - currentPos.y);
 		lastParentPos = currentPos;
