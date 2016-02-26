@@ -23,5 +23,7 @@ public class ShipCamera : MonoBehaviour {
 			Camera.main.orthographicSize--;
 		}
 		Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, orthographicSizeMin, orthographicSizeMax);
+		ParallaxStars stars = (ParallaxStars)GameObject.FindObjectOfType(typeof(ParallaxStars));
+		stars.updateStars();
 	}
 }

@@ -41,7 +41,7 @@ public class AsteroidField : MonoBehaviour {
 					}
 					Asteroid a = Asteroid.createAsteroid(pos, new Vector2(0,0), 100, "large");
 					a.gameObject.GetComponent<Rigidbody2D>().angularVelocity += (Random.value - 0.5f) * 50f;
-					a.gameObject.GetComponent<Rigidbody2D>().AddForce (new Vector2((Random.value - 0.5f) * 50f, (Random.value - 0.5f) * 50f));
+					a.gameObject.GetComponent<Rigidbody2D>().AddForce (new Vector2((Random.value - 0.5f) * 330f, (Random.value - 0.5f) * 330f));
 					lastSpawn = Time.time;
 				}
 			}

@@ -59,6 +59,7 @@ public class ControllableShip : MonoBehaviour {
 
 		Vector3 newPos =  new Vector3(rigidBody.position.x, rigidBody.position.y, -5);
 		myCamera.transform.position = newPos;
+
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
