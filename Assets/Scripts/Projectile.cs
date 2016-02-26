@@ -14,6 +14,10 @@ public class Projectile : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
+		Asteroid impacted;
+		if (impacted = collision.gameObject.GetComponent<Asteroid>()) {
+			impacted.takeDamage(20);
+		}
 		Destroy(this.gameObject);
 	}
 	

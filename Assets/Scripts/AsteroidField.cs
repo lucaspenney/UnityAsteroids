@@ -10,7 +10,6 @@ public class AsteroidField : MonoBehaviour {
 	public float minSpawnRange = 10f;
 	public float despawnRange = 20f;
 	public int maxAsteroids = 100;
-
 	private float lastSpawn = 0f;
 
 
@@ -40,7 +39,7 @@ public class AsteroidField : MonoBehaviour {
 						i--;
 						continue;
 					}
-					Asteroid a = (Asteroid)Instantiate(asteroid, pos, Quaternion.identity);
+					Asteroid a = Asteroid.createAsteroid(pos, new Vector2(0,0), 100, "large");
 					a.gameObject.GetComponent<Rigidbody2D>().angularVelocity += (Random.value - 0.5f) * 50f;
 					a.gameObject.GetComponent<Rigidbody2D>().AddForce (new Vector2((Random.value - 0.5f) * 50f, (Random.value - 0.5f) * 50f));
 					lastSpawn = Time.time;
