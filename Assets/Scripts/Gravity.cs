@@ -23,13 +23,12 @@ public class Gravity : MonoBehaviour {
 			Vector2 diff = new Vector2(this.transform.position.x - obj.gameObject.transform.position.x, this.transform.position.y - obj.gameObject.transform.position.y);
 			float distSquared = (diff.x * diff.x + diff.y * diff.y);
 			float dist = Mathf.Sqrt(distSquared);
-			if (obj.GetComponent<Rigidbody2D>() != null) {
+			if (obj.GetComponent<Rigidbody2D>() != null && dist != 0) {
 				float force = (this.GetComponent<Rigidbody2D>().mass * obj.GetComponent<Rigidbody2D>().mass) / distSquared;
 				force *= gravitationalConstant;
 				Vector2 grav = new Vector2(force * diff.x / dist, force * diff.y / dist);
 
-				force *= 0.001f;
-				obj.GetComponent<Rigidbody2D>().AddForce(grav, ForceMode2D.Impulse);
+					obj.GetComponent<Rigidbody2D>().AddForce(grav, ForceMode2D.Impulse);	
 			}
 		}
 	}

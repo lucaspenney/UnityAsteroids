@@ -6,6 +6,7 @@ public class Asteroid : MonoBehaviour {
 	public int health = 100;
 	public int damage = 0;
 
+	public AudioClip destroySound;
 
 	// Use this for initialization
 	void Awake () {
@@ -19,17 +20,17 @@ public class Asteroid : MonoBehaviour {
 			for (int i=0;i<3;i++) {
 				createAsteroid(this.transform.position, vel, 80, "medium");
 			}
-			Destroy (this.gameObject);
+			this.destroy();
 		}
 		else if (damage >= 20 && health == 80) {
 			for (int i=0;i<5;i++) {
 				vel *= 0.5f;
 				createAsteroid(this.transform.position, vel, 20, "small");
 			}
-			Destroy (this.gameObject);
+			this.destroy();
 		}
 		else if (damage >= 20 && health == 20) {
-			Destroy (this.gameObject);
+			this.destroy();
 		}
 
 	}
@@ -50,8 +51,9 @@ public class Asteroid : MonoBehaviour {
 		a.GetComponent<SpriteRenderer>().sprite = texture;
 		a.gameObject.AddComponent<PolygonCollider2D>();
 		float scale = 4.5f;
-		if (size == "medium") scale = 1.5f;
+		if (size == "medium") scale = 1f;
 		else scale = 0.8f;
+		scale *= 2;
 		a.gameObject.transform.localScale = new Vector3(Random.value + scale,Random.value + scale,Random.value + scale);
 		PolygonCollider2D collider = a.gameObject.GetComponent<PolygonCollider2D>();
 		a.gameObject.GetComponent<Rigidbody2D>().mass = collider.bounds.size.magnitude * 1;
@@ -62,5 +64,10 @@ public class Asteroid : MonoBehaviour {
 	
 	public void takeDamage(int damage) {
 		this.damage += damage;
+	}
+
+	public void destroy() {
+		AudioSource.PlayClipAtPoint((AudioClip)Resources.Load("sounds/hurt", typeof(AudioClip)), Camera.main.transform.position);
+		Destroy (this.gameObject);
 	}
 }

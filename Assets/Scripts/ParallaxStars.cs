@@ -18,7 +18,6 @@ public class ParallaxStars : MonoBehaviour {
 		Vector3 camDimensions = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth, Camera.main.pixelHeight, 0));
 		width = camDimensions.x * 2f;
 		height = camDimensions.y * 2f;
-		print (width);
 		lastParentPos = parent.transform.position;
 		Star prefab = (Star)Resources.Load ("Prefabs/Star", typeof(Star));
 		for (int i=0;i<100;i++) {
