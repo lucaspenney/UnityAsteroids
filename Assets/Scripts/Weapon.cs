@@ -6,7 +6,7 @@ public class Weapon : MonoBehaviour {
 	public Rigidbody2D parent;
 	public Projectile bullet;
 
-	public float projectileSpeed = 1000f;
+	public float projectileSpeed = 2000f;
 	public float fireRate = 0.5f;
 
 	private float lastFire = 0f;

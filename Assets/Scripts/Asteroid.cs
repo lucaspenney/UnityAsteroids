@@ -67,6 +67,10 @@ public class Asteroid : MonoBehaviour {
 	}
 
 	public void destroy() {
+		if (this.health == 20) {
+			Explosion prefab = (Explosion)Resources.Load ("Prefabs/Explosion", typeof(Explosion));
+			Explosion a = (Explosion)Instantiate(prefab, transform.position, Quaternion.identity);
+		}
 		AudioSource.PlayClipAtPoint((AudioClip)Resources.Load("sounds/hurt", typeof(AudioClip)), Camera.main.transform.position);
 		Destroy (this.gameObject);
 	}

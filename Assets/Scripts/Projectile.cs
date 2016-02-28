@@ -10,7 +10,10 @@ public class Projectile : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
+		if ((gameObject.transform.position - Camera.main.transform.position).magnitude > 100) {
+			Destroy(this.gameObject);
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {

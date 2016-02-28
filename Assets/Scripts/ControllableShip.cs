@@ -12,6 +12,8 @@ public class ControllableShip : MonoBehaviour {
 	public float turnSpeed;
 	public float forwardSpeed;
 	public float boostSpeed;
+
+	public int health;
 	
 	// Use this for initialization
 	void Start () {
@@ -66,11 +68,25 @@ public class ControllableShip : MonoBehaviour {
 		foreach (ContactPoint2D contact in collision.contacts) {
 
 		}
-		
 		// Play a sound if the colliding objects had a big impact.		
 		if (collision.relativeVelocity.magnitude > 0) {
 			shieldsSound.Play();
 		}
-		
+		if (collision.relativeVelocity.magnitude > 5) {
+			this.takeDamage((int)collision.relativeVelocity.magnitude * 2);
+		}
+	}
+
+	public void takeDamage(int damage) {
+		this.health -= damage;
+		Explosion prefab = (Explosion)Resources.Load ("Prefabs/ExplosionRed", typeof(Explosion));
+		Explosion a = (Explosion)Instantiate(prefab, transform.position, Quaternion.identity);
+		a.transform.parent = gameObject.transform;
+		a.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+		if (this.health <= 0) {
+			Explosion prefab2 = (Explosion)Resources.Load ("Prefabs/ExplosionLarge", typeof(Explosion));
+			Explosion a2 = (Explosion)Instantiate(prefab2, transform.position, Quaternion.identity);
+			Destroy(this.gameObject);
+		}
 	}
 }

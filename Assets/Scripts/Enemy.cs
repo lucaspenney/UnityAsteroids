@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 
+	public int health;
+
 	private ParticleSystem engineParticles;
 
 	public Vector2 targetPos;
@@ -32,8 +34,11 @@ public class Enemy : MonoBehaviour {
 		}
 
 		if (!obstructed && Random.value > 0.95) {
-			this.GetComponentInChildren<Weapon>().aimAt(targetPos);
-			this.GetComponentInChildren<Weapon>().shoot();
+			Vector2 dist = (Vector2)transform.position - targetPos;
+			if (dist.magnitude < 15) {
+				this.GetComponentInChildren<Weapon>().aimAt(targetPos);
+				this.GetComponentInChildren<Weapon>().shoot();
+			}
 		}
 		if (r.velocity.magnitude < 2 || (pos - targetPos).magnitude > 5) {
 			engineOn = true;
@@ -52,8 +57,23 @@ public class Enemy : MonoBehaviour {
 		Vector2 tvel = obj.GetComponent<Rigidbody2D>().velocity;
 		Vector2 mvel = this.GetComponent<Rigidbody2D>().velocity;
 		Vector2 vdiff = tvel - mvel;
-		if (tvel.magnitude > 2 || vdiff.magnitude > 1) {
+		if (mvel.magnitude > 2) {
 			targetPos += (new Vector2(tvel.x / 4, tvel.y / 4));	
+		}
+	}
+
+	void OnCollisionEnter2D(Collision2D collision) {
+		if (collision.relativeVelocity.magnitude > 5) {
+			this.takeDamage((int)collision.relativeVelocity.magnitude * 2);
+		}
+	}
+
+	public void takeDamage(int damage) {
+		this.health -= damage;
+		if (this.health <= 0) {
+			Explosion prefab = (Explosion)Resources.Load ("Prefabs/ExplosionMedium", typeof(Explosion));
+			Explosion a = (Explosion)Instantiate(prefab, transform.position, Quaternion.identity);
+			Destroy(this.gameObject);
 		}
 	}
 
