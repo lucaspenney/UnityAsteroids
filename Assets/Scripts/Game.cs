@@ -4,7 +4,7 @@ using System.Collections;
 public class Game : MonoBehaviour {
 
 	public int waves;
-	public int currentWave = 0;
+	public int currentWave = -1;
 
 	public float minSpawnRange;
 	public float maxSpawnRange;
@@ -14,14 +14,7 @@ public class Game : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		waveStartTime = 0;
-		startNextWave();
-	}
-
-	void startNextWave() {
-		if (currentWave < waves) {
-			currentWave++;
-		}
+		waveStartTime = Time.time;
 	}
 	
 	// Update is called once per frame
@@ -30,6 +23,9 @@ public class Game : MonoBehaviour {
 		GameObject parent = this.gameObject;
 		if (enemies.Length == 0) {
 			currentWave++;
+			UnityEngine.UI.Text text = GameObject.Find("WaveText").GetComponent<UnityEngine.UI.Text>();
+			text.text = "Wave " + currentWave;
+			waveStartTime = Time.time;
 			for (int i=0;i<currentWave * 10 ;i++) {
 				Vector2 pos = Random.insideUnitCircle;
 				pos.x *= maxSpawnRange;
@@ -45,6 +41,11 @@ public class Game : MonoBehaviour {
 				Enemy prefab = (Enemy)Resources.Load ("Prefabs/Enemy", typeof(Enemy));
 				Enemy a = (Enemy)Instantiate(prefab, pos, Quaternion.identity);
 			}
+		}
+
+		if (Time.time - waveStartTime > 3) {
+			UnityEngine.UI.Text text = GameObject.Find("WaveText").GetComponent<UnityEngine.UI.Text>();
+			text.text = "";
 		}
 	}
 

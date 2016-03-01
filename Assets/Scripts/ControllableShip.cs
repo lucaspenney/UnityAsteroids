@@ -42,7 +42,6 @@ public class ControllableShip : MonoBehaviour {
 			Vector2 newVel = rigidBody.velocity;
 			newVel += new Vector2(x,y);
 			if (newVel.magnitude <= this.maxSpeed) {
-				print(1);
 				rigidBody.AddForce (new Vector2 (x, y));
 			}
 
