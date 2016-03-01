@@ -41,7 +41,7 @@ public class Game : MonoBehaviour {
 					i--;
 					continue;
 				}
-				print(pos);
+
 				Enemy prefab = (Enemy)Resources.Load ("Prefabs/Enemy", typeof(Enemy));
 				Enemy a = (Enemy)Instantiate(prefab, pos, Quaternion.identity);
 			}

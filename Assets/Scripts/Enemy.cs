@@ -10,20 +10,29 @@ public class Enemy : MonoBehaviour {
 	public Vector2 targetPos;
 
 
-	private bool engineOn = true;
-	public float forwardSpeed = 10;
+	public bool engineOn = true;
+	private float lastRetrograde = 0;
+	private float lastThink = 0;
+
+	public float maxSpeed = 25;
+	public float forwardSpeed = 15;
+
+	private float turnSpeedScale = 3f;
 
 	// Use this for initialization
 	void Start () {
 		engineParticles = this.GetComponentInChildren<ParticleSystem>();
+		lastThink = Time.time;
+		lastRetrograde = Time.time;
 	}
 
 	// Update is called once per frame
 	void Update () {
+		
+		Vector2 oldTargetPos = targetPos;
 		Vector2 pos = new Vector2(transform.position.x, transform.position.y);
 
-		this.findTarget();
-		this.lookAt(targetPos);
+		Debug.DrawLine(transform.position, new Vector3(targetPos.x,targetPos.y, 0), Color.blue, 0.1f, true);
 		Rigidbody2D r = this.GetComponent<Rigidbody2D>();
 		RaycastHit2D[] obstacles = Physics2D.LinecastAll(transform.position, targetPos);
 		bool obstructed = false;
@@ -33,33 +42,64 @@ public class Enemy : MonoBehaviour {
 			}
 		}
 
+
+
+
+		ControllableShip obj = (ControllableShip)GameObject.FindObjectOfType(typeof(ControllableShip));
+		Vector2 tvel = obj.GetComponent<Rigidbody2D>().velocity;
+		Vector2 mvel = this.GetComponent<Rigidbody2D>().velocity;
+		Vector2 vdiff = (tvel - mvel);
+
+		Vector2 dist = (Vector2)transform.position - targetPos;
+		Vector2 futureOffPos = (Vector2)transform.position + (mvel * 10f);
+		Vector2 futureOnPos = (Vector2)transform.position + (mvel + (getEngineForce() * 4f));
+		Vector2 futureOffDist = futureOffPos - targetPos;
+		Vector2 futureOnDist = futureOnPos - targetPos;
+
+		float lastRotation = r.rotation * Mathf.Rad2Deg;
+		lastThink = Time.time;
+		targetPos = new Vector2(obj.transform.position.x, obj.transform.position.y);
+		if (vdiff.magnitude > 18 && dist.magnitude > 10) {
+			float diffMag = (vdiff.magnitude - 15) / 2;
+			targetPos = new Vector2(obj.transform.position.x + (tvel.x * diffMag), obj.transform.position.y + (tvel.y * diffMag));
+			lastRetrograde = Time.time;
+			targetPos -= mvel * diffMag;
+		}
+		this.lookAt(targetPos);
+		float currentRotation = r.rotation;
+
+
+
 		if (!obstructed && Random.value > 0.95) {
-			Vector2 dist = (Vector2)transform.position - targetPos;
 			if (dist.magnitude < 15) {
 				this.GetComponentInChildren<Weapon>().aimAt(targetPos);
 				this.GetComponentInChildren<Weapon>().shoot();
 			}
 		}
-		if (r.velocity.magnitude < 2 || (pos - targetPos).magnitude > 5) {
+
+		engineOn = false;
+
+		Vector2 newVel = (mvel + this.getEngineForce());
+		if (dist.magnitude > 8 && newVel.magnitude < this.maxSpeed) {
 			engineOn = true;
 		}
-		else engineOn = false;
+
+
 		if (engineOn) {
-			float x = Mathf.Cos ((r.rotation - 90) * Mathf.Deg2Rad) * forwardSpeed;
-			float y = Mathf.Sin ((r.rotation - 90) * Mathf.Deg2Rad) * forwardSpeed;
-			r.AddForce (new Vector2 (x, y));
+			r.AddForce(getEngineForce());
+			engineParticles.Play();
+		}
+		else {
+			engineParticles.Stop();
 		}
 	}
 
-	public void findTarget() {
-		ControllableShip obj = (ControllableShip)GameObject.FindObjectOfType(typeof(ControllableShip));
-		targetPos = new Vector2(obj.transform.position.x, obj.transform.position.y);
-		Vector2 tvel = obj.GetComponent<Rigidbody2D>().velocity;
-		Vector2 mvel = this.GetComponent<Rigidbody2D>().velocity;
-		Vector2 vdiff = tvel - mvel;
-		if (mvel.magnitude > 2) {
-			targetPos += (new Vector2(tvel.x / 4, tvel.y / 4));	
-		}
+	Vector2 getEngineForce() {
+		//Get force that engine would apply for current rotation
+		Rigidbody2D r = this.GetComponent<Rigidbody2D>();
+		float x = Mathf.Cos ((r.rotation - 90) * Mathf.Deg2Rad) * forwardSpeed;
+		float y = Mathf.Sin ((r.rotation - 90) * Mathf.Deg2Rad) * forwardSpeed;
+		return new Vector2(x,y);
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
@@ -79,6 +119,7 @@ public class Enemy : MonoBehaviour {
 
 	private void lookAt(Vector2 target) {
 		Vector2 dir = new Vector2(transform.position.x, transform.position.y) - target;
-		this.gameObject.transform.rotation = Quaternion.Euler(0f,0f,Mathf.Atan2(dir.y,dir.x) * Mathf.Rad2Deg + 270);
+		float r = Mathf.Atan2(dir.y,dir.x) * Mathf.Rad2Deg + 270;
+		gameObject.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0f,0f,r), Time.time * this.turnSpeedScale);
 	}
 }
