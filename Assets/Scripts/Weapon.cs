@@ -28,6 +28,17 @@ public class Weapon : MonoBehaviour {
 		this.gameObject.transform.rotation = Quaternion.Euler(0f,0f,Mathf.Atan2(dir.y,dir.x) * Mathf.Rad2Deg + 90);
 	}
 
+	public void rotateTo(float rotation) {
+		this.gameObject.transform.rotation = Quaternion.Euler(0f,0f,rotation);
+	}
+
+	public bool canShoot() {
+		if (Time.time  - lastFire > fireRate) {
+			return true;
+		}
+		return false;
+	}
+
 	public void shoot() {
 		lastFire = Time.time;
 		Projectile b = (Projectile)Instantiate (bullet, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);

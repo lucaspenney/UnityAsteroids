@@ -9,6 +9,7 @@ public class ControllableShip : MonoBehaviour {
 	public AudioSource engineSound;
 	public ParticleSystem engineParticles;
 
+	public float maxSpeed;
 	public float turnSpeed;
 	public float forwardSpeed;
 	public float boostSpeed;
@@ -27,18 +28,23 @@ public class ControllableShip : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKey (KeyCode.W)) {
+			float x, y;
 			if (Input.GetKey (KeyCode.LeftShift)) {
-				float x = Mathf.Cos ((rigidBody.rotation - 270) * Mathf.Deg2Rad) * boostSpeed;
-				float y = Mathf.Sin ((rigidBody.rotation - 270) * Mathf.Deg2Rad) * boostSpeed;
-				rigidBody.AddForce (new Vector2 (x, y));
+				x = Mathf.Cos ((rigidBody.rotation - 270) * Mathf.Deg2Rad) * boostSpeed;
+				y = Mathf.Sin ((rigidBody.rotation - 270) * Mathf.Deg2Rad) * boostSpeed;
 				engineParticles.startColor = Color.white;
 			} else {
-				float x = Mathf.Cos ((rigidBody.rotation - 270) * Mathf.Deg2Rad) * forwardSpeed;
-				float y = Mathf.Sin ((rigidBody.rotation - 270) * Mathf.Deg2Rad) * forwardSpeed;
-				rigidBody.AddForce (new Vector2 (x, y));
+				x = Mathf.Cos ((rigidBody.rotation - 270) * Mathf.Deg2Rad) * forwardSpeed;
+				y = Mathf.Sin ((rigidBody.rotation - 270) * Mathf.Deg2Rad) * forwardSpeed;
+
 				engineParticles.startColor = Color.gray;
 			}
-
+			Vector2 newVel = rigidBody.velocity;
+			newVel += new Vector2(x,y);
+			if (newVel.magnitude <= this.maxSpeed) {
+				print(1);
+				rigidBody.AddForce (new Vector2 (x, y));
+			}
 
 			engineParticles.Play();
 			if (!engineSound.isPlaying) {
@@ -56,6 +62,13 @@ public class ControllableShip : MonoBehaviour {
 		if (Input.GetKey (KeyCode.D)) {
 			if (rigidBody.angularVelocity > 0) rigidBody.angularVelocity -= turnSpeed;
 			rigidBody.angularVelocity -= turnSpeed;
+		}
+
+		if (Input.GetKey(KeyCode.Space)) {
+			if (GetComponentInChildren<Weapon>().canShoot()) {
+				this.GetComponentInChildren<Weapon>().rotateTo(this.transform.rotation.eulerAngles.z);
+				this.GetComponentInChildren<Weapon>().shoot();
+			}
 		}
 
 

@@ -51,8 +51,8 @@ public class Enemy : MonoBehaviour {
 		Vector2 vdiff = (tvel - mvel);
 
 		Vector2 dist = (Vector2)transform.position - targetPos;
-		Vector2 futureOffPos = (Vector2)transform.position + (mvel * 10f);
-		Vector2 futureOnPos = (Vector2)transform.position + (mvel + (getEngineForce() * 4f));
+		Vector2 futureOffPos = (Vector2)transform.position + (mvel * 4f);
+		Vector2 futureOnPos = (Vector2)transform.position + (mvel + (getEngineForce() * 2f));
 		Vector2 futureOffDist = futureOffPos - targetPos;
 		Vector2 futureOnDist = futureOnPos - targetPos;
 
@@ -60,10 +60,11 @@ public class Enemy : MonoBehaviour {
 		lastThink = Time.time;
 		targetPos = new Vector2(obj.transform.position.x, obj.transform.position.y);
 		if (vdiff.magnitude > 18 && dist.magnitude > 10) {
-			float diffMag = (vdiff.magnitude - 15) / 2;
-			targetPos = new Vector2(obj.transform.position.x + (tvel.x * diffMag), obj.transform.position.y + (tvel.y * diffMag));
-			lastRetrograde = Time.time;
-			targetPos -= mvel * diffMag;
+			Vector2 newTargetPos;
+			float diffMag = (vdiff.magnitude - 15) / 3;
+			newTargetPos = new Vector2(obj.transform.position.x + (tvel.x * diffMag), obj.transform.position.y + (tvel.y * diffMag));
+			newTargetPos -= mvel * (diffMag / 3);
+			targetPos = newTargetPos;
 		}
 		this.lookAt(targetPos);
 		float currentRotation = r.rotation;
