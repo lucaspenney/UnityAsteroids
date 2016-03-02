@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D collision) {
 		Asteroid impacted;
 		if (impacted = collision.gameObject.GetComponent<Asteroid>()) {
-			impacted.takeDamage(20);
+			impacted.takeDamage(250);
 			Vector2 velDiff = this.GetComponent<Rigidbody2D>().velocity - impacted.GetComponent<Rigidbody2D>().velocity;
 			impacted.GetComponent<Rigidbody2D>().AddForce(velDiff * 0.6f, ForceMode2D.Impulse);
 		}

@@ -46,6 +46,7 @@ public class Enemy : MonoBehaviour {
 
 
 		ControllableShip obj = (ControllableShip)GameObject.FindObjectOfType(typeof(ControllableShip));
+		if (!obj)return;
 		Vector2 tvel = obj.GetComponent<Rigidbody2D>().velocity;
 		Vector2 mvel = this.GetComponent<Rigidbody2D>().velocity;
 		Vector2 vdiff = (tvel - mvel);

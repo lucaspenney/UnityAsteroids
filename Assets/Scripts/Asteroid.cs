@@ -16,13 +16,13 @@ public class Asteroid : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector2 vel = this.GetComponent<Rigidbody2D>().velocity;
-		if (damage >= 40 && health == 100) {
+		if (damage >= 500 && health == 500) {
 			for (int i=0;i<3;i++) {
-				createAsteroid(this.transform.position, vel, 80, "medium");
+				createAsteroid(this.transform.position, vel, 100, "medium");
 			}
 			this.destroy();
 		}
-		else if (damage >= 20 && health == 80) {
+		else if (damage >= 100 && health == 100) {
 			for (int i=0;i<5;i++) {
 				vel *= 0.5f;
 				createAsteroid(this.transform.position, vel, 20, "small");
@@ -37,7 +37,12 @@ public class Asteroid : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D collision) {
 		if (collision.relativeVelocity.magnitude > 0) {
-			collision.gameObject.GetComponent<Shield>();
+			Asteroid a = collision.gameObject.GetComponent<Asteroid>();
+			if (a != null) {
+				float damage = collision.relativeVelocity.magnitude * (a.GetComponent<Rigidbody2D>().mass + this.GetComponent<Rigidbody2D>().mass);
+				damage *= Random.value;
+				a.takeDamage((int)damage);
+			}
 		}
 	}
 

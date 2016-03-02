@@ -4,7 +4,7 @@ using System.Collections;
 public class BlackHole : MonoBehaviour {
 
 	public float duration = 5;
-	public float strength = 10000;
+	public float strength = 100;
 	public float startDelay = 1;
 	private float startTime;
 
@@ -20,8 +20,22 @@ public class BlackHole : MonoBehaviour {
 		}
 
 		if (Time.time - startTime > startDelay) {
-			Rigidbody2D r = this.GetComponent<Rigidbody2D> ();
+			if (!gameObject.GetComponent<AudioSource>().isPlaying && gameObject.GetComponent<AudioSource>().enabled) {
+				gameObject.GetComponent<AudioSource>().Play();
+			}
+
+
+			Rigidbody2D r = this.GetComponent<Rigidbody2D>();
 			r.mass += strength;
+
+			ParticleSystem ps = this.GetComponent<ParticleSystem>();
+			ParticleSystem.EmissionModule em = ps.emission;
+
+			ParticleSystem.MinMaxCurve mmc = em.rate;
+			mmc.mode = ParticleSystemCurveMode.Constant;
+			mmc.constantMax *= 1.1f;
+			mmc.constantMin *= 1.1f;
+			em.rate = mmc;
 		}
 	}
 }
