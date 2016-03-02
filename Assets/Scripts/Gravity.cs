@@ -27,11 +27,8 @@ public class Gravity : MonoBehaviour {
 				float force = (this.GetComponent<Rigidbody2D>().mass * obj.GetComponent<Rigidbody2D>().mass) / distSquared;
 				force *= gravitationalConstant;
 				Vector2 grav = new Vector2(force * diff.x / dist, force * diff.y / dist);
-
-					obj.GetComponent<Rigidbody2D>().AddForce(grav, ForceMode2D.Impulse);	
+				obj.GetComponent<Rigidbody2D>().AddForce(grav, ForceMode2D.Impulse);
 			}
 		}
 	}
-
-
 }

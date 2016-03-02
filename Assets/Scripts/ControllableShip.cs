@@ -70,6 +70,11 @@ public class ControllableShip : MonoBehaviour {
 			}
 		}
 
+		if (Input.GetKey (KeyCode.G)) {
+			GameObject prefab = (GameObject)Resources.Load ("Prefabs/GravityBomb", typeof(GameObject));
+			GameObject a = (GameObject)Instantiate(prefab, transform.position, Quaternion.identity);
+		}
+
 
 		Vector3 newPos =  new Vector3(rigidBody.position.x, rigidBody.position.y, -5);
 		myCamera.transform.position = newPos;
