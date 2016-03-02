@@ -44,6 +44,7 @@ public class Shield : MonoBehaviour, IDamageable {
 	}
 
 	public void takeDamage(int damage) {
+		Game.eventManager.dispatch("SHIELD_TAKE_DAMAGE", this);
 		this.health -= damage;
 		if (this.health <= 0) {
 			Destroy(this.gameObject);

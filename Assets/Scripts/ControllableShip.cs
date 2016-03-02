@@ -15,9 +15,11 @@ public class ControllableShip : MonoBehaviour, IDamageable {
 	public float boostSpeed;
 
 	public int health;
+	public int startHealth;
 	
 	// Use this for initialization
 	void Start () {
+		startHealth = health;
 		rigidBody = this.GetComponent<Rigidbody2D>();
 		myCamera = Camera.main;
 		shieldsSound = this.GetComponents<AudioSource>()[0];
@@ -92,11 +94,16 @@ public class ControllableShip : MonoBehaviour, IDamageable {
 	}
 
 	public void takeDamage(int damage) {
+		if (this.GetComponentInChildren<Shield> () != null)
+			return;
+		
 		this.health -= damage;
+		Game.eventManager.dispatch ("PLAYER_TAKE_DAMAGE", this);
 		Explosion prefab = (Explosion)Resources.Load ("Prefabs/ExplosionRed", typeof(Explosion));
 		Explosion a = (Explosion)Instantiate(prefab, transform.position, Quaternion.identity);
 		a.transform.parent = gameObject.transform;
 		a.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+
 		if (this.health <= 0) {
 			Explosion prefab2 = (Explosion)Resources.Load ("Prefabs/ExplosionLarge", typeof(Explosion));
 			Explosion a2 = (Explosion)Instantiate(prefab2, transform.position, Quaternion.identity);
