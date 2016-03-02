@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour, IDamageable {
 
 	public int health;
 
@@ -114,7 +114,8 @@ public class Enemy : MonoBehaviour {
 		this.health -= damage;
 		if (this.health <= 0) {
 			Explosion prefab = (Explosion)Resources.Load ("Prefabs/ExplosionMedium", typeof(Explosion));
-			Explosion a = (Explosion)Instantiate(prefab, transform.position, Quaternion.identity);
+			Instantiate(prefab, transform.position, Quaternion.identity);
+			Game.eventManager.dispatch ("ENEMY_DESTROYED", this);
 			Destroy(this.gameObject);
 		}
 	}

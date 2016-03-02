@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ControllableShip : MonoBehaviour {
+public class ControllableShip : MonoBehaviour, IDamageable {
 
 	public Rigidbody2D rigidBody;
 	public Camera myCamera;
@@ -82,9 +82,6 @@ public class ControllableShip : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
-		foreach (ContactPoint2D contact in collision.contacts) {
-
-		}
 		// Play a sound if the colliding objects had a big impact.		
 		if (collision.relativeVelocity.magnitude > 0) {
 			shieldsSound.Play();
@@ -105,5 +102,6 @@ public class ControllableShip : MonoBehaviour {
 			Explosion a2 = (Explosion)Instantiate(prefab2, transform.position, Quaternion.identity);
 			Destroy(this.gameObject);
 		}
+
 	}
 }

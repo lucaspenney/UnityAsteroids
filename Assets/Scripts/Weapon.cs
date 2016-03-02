@@ -51,8 +51,10 @@ public class Weapon : MonoBehaviour {
 		float y = Mathf.Sin ((transform.eulerAngles.z - 270) * Mathf.Deg2Rad) * projectileSpeed;
 		
 		body.AddForce(new Vector2(x, y));
-		
-		Physics2D.IgnoreCollision(parent.GetComponent<Collider2D>(), b.gameObject.GetComponent<BoxCollider2D>());
-		Physics2D.IgnoreCollision(this.parent.GetComponentInChildren<CircleCollider2D>(), b.gameObject.GetComponent<BoxCollider2D>());
+
+		Collider2D[] colliders = parent.GetComponentsInChildren<Collider2D>();
+		for (int i = 0; i < colliders.Length; i++) {
+			Physics2D.IgnoreCollision(colliders[i], b.gameObject.GetComponent<BoxCollider2D>());
+		}
 	}
 }

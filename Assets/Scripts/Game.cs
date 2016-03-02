@@ -14,12 +14,26 @@ public class Game : MonoBehaviour {
 	public float waveTime = 0;
 
 	private float endTime = -1;
+	private float waveKills = 0;
+	private int score = 0;
 
 	public GameObject parent;
+
+	public static EventDispatcher eventManager = new EventDispatcher();
 
 	// Use this for initialization
 	void Start () {
 		waveStartTime = Time.time;
+
+		eventManager.addListener("ENEMY_DESTROYED", onEnemyDestroyed);
+	}
+
+	public void onEnemyDestroyed(object e) {
+		Enemy enemy = (Enemy)e;
+		if (enemy) {
+			waveKills++;
+			score += 10;
+		}
 	}
 	
 	// Update is called once per frame

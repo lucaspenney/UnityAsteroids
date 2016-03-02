@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Asteroid : MonoBehaviour {
+public class Asteroid : MonoBehaviour, IDamageable {
 
 	public int health = 100;
 	public int damage = 0;

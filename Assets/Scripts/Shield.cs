@@ -1,31 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Shield : MonoBehaviour {
+public class Shield : MonoBehaviour, IDamageable {
 
+	public int startHealth = 5000;
 	public int health;
 
 	public Sprite fullSprite;
 	public Sprite halfSprite;
 	public Sprite lowSprite;
 
-	public CircleCollider2D myCollider;
-
 	// Use this for initialization
 	void Start () {
-		myCollider = this.GetComponent<CircleCollider2D>();
+		health = startHealth;
 		this.GetComponent<SpriteRenderer>().sprite = fullSprite;
+		Physics2D.IgnoreCollision (this.GetComponentInParent<Collider2D> (), this.GetComponent<CircleCollider2D> ());
 	}
 	
 	// Update is called once per frame
-	void OnCollisionEnter2D(Collision2D collision) {
+	void Update() {
 		SpriteRenderer renderer = this.GetComponent<SpriteRenderer>();
-		if (health > 0) health -= 1;
 
-		if (health > 7) {
+		if (health / startHealth > 0.7) {
 			renderer.sprite = fullSprite;
 		}
-		else if (health > 3) {
+		else if (health / startHealth > 0.4) {
 			renderer.sprite = halfSprite;
 			transform.localPosition = new Vector2(0, -0.01f);
 		}
@@ -35,7 +34,20 @@ public class Shield : MonoBehaviour {
 		}
 		else {
 			renderer.sprite = null;
-			this.GetComponent<CircleCollider2D>().enabled = false;
+		}
+	}
+
+	void OnCollisionEnter2D(Collision2D collision) {
+		if (collision.relativeVelocity.magnitude > 5) {
+			this.takeDamage((int)collision.relativeVelocity.magnitude * 2);
+		}
+	}
+
+	public void takeDamage(int damage) {
+		this.health -= damage;
+		if (this.health <= 0) {
+			Destroy(this.gameObject);
+
 		}
 	}
 }
