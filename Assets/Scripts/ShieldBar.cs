@@ -14,7 +14,8 @@ public class ShieldBar : MonoBehaviour {
 
 	void onShieldDamage(object e) {
 		Shield s = (Shield)e;
-		this.GetComponentInChildren<Text> ().text = string.Format("{0:P2}", (float)s.health / (float)s.startHealth);
+		float val = Mathf.Clamp((float)s.health / (float)s.startHealth, 0 , 100);
+		this.GetComponentInChildren<Text> ().text = string.Format("{0:P2}", val);
 	}
 
 	// Update is called once per frame
