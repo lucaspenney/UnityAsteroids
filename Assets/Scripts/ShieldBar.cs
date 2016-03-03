@@ -8,7 +8,7 @@ public class ShieldBar : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Game.eventManager.addListener ("SHIELD_TAKE_DAMAGE", onShieldDamage);
+		Game.eventManager.addListener("SHIELD_TAKE_DAMAGE", onShieldDamage);
 		onShieldDamage (ship.GetComponentInChildren<Shield>());
 	}
 

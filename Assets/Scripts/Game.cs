@@ -19,10 +19,11 @@ public class Game : MonoBehaviour {
 
 	public GameObject parent;
 
-	public static EventDispatcher eventManager = new EventDispatcher();
+	public static EventDispatcher eventManager;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
+		Game.eventManager = new EventDispatcher();
 		waveStartTime = Time.time;
 
 		eventManager.addListener("ENEMY_DESTROYED", onEnemyDestroyed);
@@ -39,7 +40,7 @@ public class Game : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Enemy[] enemies = (Enemy[])GameObject.FindObjectsOfType (typeof(Enemy));
-		if (enemies.Length == 0) {
+		if (enemies.Length == 0 && parent) {
 			currentWave++;
 			UnityEngine.UI.Text text = GameObject.Find("WaveText").GetComponent<UnityEngine.UI.Text>();
 			text.text = "Wave " + currentWave;
@@ -71,6 +72,7 @@ public class Game : MonoBehaviour {
 			endTime = Time.time;
 		}
 		if (endTime != -1 && Time.time - endTime > 3) {
+			SceneManager.UnloadScene("scene");
 			SceneManager.LoadScene("scene");
 		}
 	}
