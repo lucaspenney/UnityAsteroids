@@ -77,6 +77,14 @@ public class ControllableShip : MonoBehaviour, IDamageable {
 			GameObject a = (GameObject)Instantiate(prefab, transform.position, Quaternion.identity);
 		}
 
+		if (Input.GetKeyDown (KeyCode.R)) {
+			GameObject prefab = (GameObject)Resources.Load ("Prefabs/Missile", typeof(GameObject));
+			GameObject a = (GameObject)Instantiate(prefab, transform.position, Quaternion.identity);
+			a.GetComponent<Rigidbody2D>().velocity = rigidBody.velocity;
+			Physics2D.IgnoreCollision(a.GetComponent<Collider2D>(), gameObject.GetComponent<Collider2D>());
+			Physics2D.IgnoreCollision(this.gameObject.GetComponentInChildren<CircleCollider2D>(), a.gameObject.GetComponent<Collider2D>());
+		}
+
 
 		Vector3 newPos =  new Vector3(rigidBody.position.x, rigidBody.position.y, -5);
 		myCamera.transform.position = newPos;

@@ -72,7 +72,6 @@ public class Game : MonoBehaviour {
 			endTime = Time.time;
 		}
 		if (endTime != -1 && Time.time - endTime > 3) {
-			SceneManager.UnloadScene("scene");
 			SceneManager.LoadScene("scene");
 		}
 	}
