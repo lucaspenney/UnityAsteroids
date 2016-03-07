@@ -15,6 +15,10 @@ public class Game : MonoBehaviour {
 
 	private float endTime = -1;
 	private float waveKills = 0;
+	private float waveSpawns = 0;
+	private float lastSpawnTime = 0;
+	private float waveTotalSpawns = 0;
+	private float spawnRate = 1;
 	private int score = 0;
 
 	public GameObject parent;
@@ -39,27 +43,22 @@ public class Game : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Enemy[] enemies = (Enemy[])GameObject.FindObjectsOfType (typeof(Enemy));
-		if (enemies.Length == 0 && parent) {
+
+		if (waveSpawns < waveTotalSpawns && Time.time - lastSpawnTime > spawnRate) {
+			spawnEnemy();
+			waveSpawns++;
+			lastSpawnTime = Time.time;
+		}
+
+		if (waveKills == waveTotalSpawns) {
 			currentWave++;
 			UnityEngine.UI.Text text = GameObject.Find("WaveText").GetComponent<UnityEngine.UI.Text>();
 			text.text = "Wave " + currentWave;
 			waveStartTime = Time.time;
-			for (int i=0;i<currentWave * 10 ;i++) {
-				Vector2 pos = Random.insideUnitCircle;
-				pos.x *= maxSpawnRange;
-				pos.y *= maxSpawnRange;
-				pos.x += parent.transform.position.x;
-				pos.y += parent.transform.position.y;
-				Vector2 diff = (Vector2)transform.position - pos;
-				if (diff.magnitude < minSpawnRange) {
-					i--;
-					continue;
-				}
-
-				Enemy prefab = (Enemy)Resources.Load ("Prefabs/Enemy", typeof(Enemy));
-				Enemy a = (Enemy)Instantiate(prefab, pos, Quaternion.identity);
-			}
+			waveTotalSpawns = currentWave * 10;
+			waveSpawns = 0;
+			waveKills = 0;
+			spawnRate *= 0.9f;
 		}
 
 		if (Time.time - waveStartTime > 3) {
@@ -77,6 +76,19 @@ public class Game : MonoBehaviour {
 	}
 
 	void spawnEnemy() {
+		if (!parent) return;
+		Vector2 pos = Random.insideUnitCircle;
+		pos.x *= maxSpawnRange;
+		pos.y *= maxSpawnRange;
+		pos.x += parent.transform.position.x;
+		pos.y += parent.transform.position.y;
+		Vector2 diff = (Vector2)transform.position - pos;
+		if (diff.magnitude < minSpawnRange) {
+			spawnEnemy();
+			return;
+		}
 
+		Enemy prefab = (Enemy)Resources.Load ("Prefabs/Enemy", typeof(Enemy));
+		Enemy a = (Enemy)Instantiate(prefab, pos, Quaternion.identity);
 	}
 }
