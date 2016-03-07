@@ -30,6 +30,8 @@ public class Projectile : MonoBehaviour {
 		if (impacted != null) {
 			impacted.takeDamage(250);
 		}
+		Explosion prefab = (Explosion)Resources.Load ("Prefabs/ExplosionMedium2", typeof(Explosion));
+		Instantiate(prefab, collision.contacts[0].point, Quaternion.identity);
 		Destroy(this.gameObject);
 	}
 	
