@@ -82,7 +82,7 @@ public class Game : MonoBehaviour {
 		pos.y *= maxSpawnRange;
 		pos.x += parent.transform.position.x;
 		pos.y += parent.transform.position.y;
-		Vector2 diff = (Vector2)transform.position - pos;
+		Vector2 diff = (Vector2)parent.transform.position - pos;
 		if (diff.magnitude < minSpawnRange) {
 			spawnEnemy();
 			return;

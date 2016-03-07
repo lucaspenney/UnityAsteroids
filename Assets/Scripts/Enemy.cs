@@ -106,7 +106,7 @@ public class Enemy : MonoBehaviour, IDamageable {
 
 	void OnCollisionEnter2D(Collision2D collision) {
 		if (collision.relativeVelocity.magnitude > 5) {
-			this.takeDamage((int)collision.relativeVelocity.magnitude * 2);
+			this.takeDamage((int)collision.relativeVelocity.magnitude * 1);
 		}
 	}
 
@@ -116,6 +116,9 @@ public class Enemy : MonoBehaviour, IDamageable {
 			Explosion prefab = (Explosion)Resources.Load ("Prefabs/ExplosionMedium", typeof(Explosion));
 			Instantiate(prefab, transform.position, Quaternion.identity);
 			Game.eventManager.dispatch ("ENEMY_DESTROYED", this);
+
+			GameObject prefab2 = (GameObject)Resources.Load ("Prefabs/RandomPowerUp", typeof(GameObject));
+			Instantiate(prefab2, transform.position, Quaternion.identity);
 			Destroy(this.gameObject);
 		}
 	}

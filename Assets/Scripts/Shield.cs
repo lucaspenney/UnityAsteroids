@@ -47,8 +47,10 @@ public class Shield : MonoBehaviour, IDamageable {
 		Game.eventManager.dispatch("SHIELD_TAKE_DAMAGE", this);
 		this.health -= damage;
 		if (this.health <= 0) {
-			Destroy(this.gameObject);
-
+			this.GetComponent<CircleCollider2D>().enabled = false;
+		}
+		else {
+			this.GetComponent<CircleCollider2D>().enabled = true;
 		}
 	}
 }
