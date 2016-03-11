@@ -41,8 +41,8 @@ public class Shield : MonoBehaviour, IDamageable {
 	}
 
 	public void takeDamage(int damage) {
-		Game.eventManager.dispatch("SHIELD_TAKE_DAMAGE", this);
 		this.health -= damage;
+		Game.eventManager.dispatch("SHIELD_TAKE_DAMAGE", this);
 		//Actually disabling the collider seems to cause rigidbody problems...so lets just make it too small to matter
 		if (this.health <= 0) {
 			this.GetComponent<CircleCollider2D>().radius = 0.01f;
