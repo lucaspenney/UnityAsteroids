@@ -108,7 +108,7 @@ public class ControllableShip : MonoBehaviour, IDamageable {
 	}
 
 	public void takeDamage(int damage) {
-		if (this.GetComponentInChildren<Shield>() != null)
+		if (this.GetComponentInChildren<Shield>().health > 0)
 			return;
 		
 		this.health -= damage;

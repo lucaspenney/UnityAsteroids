@@ -4,12 +4,12 @@ using System.Collections;
 public class Projectile : MonoBehaviour {
 
 	// Use this for initialization
-	void Start () {
+	void Start() {
 	
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 		
 		if ((gameObject.transform.position - Camera.main.transform.position).magnitude > 100) {
 			Destroy(this.gameObject);
@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour {
 		Rigidbody2D theirRb = collision.gameObject.GetComponent<Rigidbody2D>();
 		Vector2 velDiff = myRb.velocity - theirRb.velocity;
 
-		if (collision.gameObject.GetComponent<FixedJoint2D> () == null) {
+		if (collision.gameObject.GetComponent<FixedJoint2D>() == null) {
 			theirRb.AddForce(velDiff * 0.6f, ForceMode2D.Impulse);
 		}
 
@@ -30,7 +30,7 @@ public class Projectile : MonoBehaviour {
 		if (impacted != null) {
 			impacted.takeDamage(250);
 		}
-		Explosion prefab = (Explosion)Resources.Load ("Prefabs/ExplosionMedium2", typeof(Explosion));
+		Explosion prefab = (Explosion)Resources.Load("Prefabs/ExplosionMedium2", typeof(Explosion));
 		Instantiate(prefab, collision.contacts[0].point, Quaternion.identity);
 		Destroy(this.gameObject);
 	}
