@@ -20,33 +20,31 @@ public class Enemy : MonoBehaviour, IDamageable {
 	private float turnSpeedScale = 3f;
 
 	// Use this for initialization
-	void Start () {
+	void Start() {
 		engineParticles = this.GetComponentInChildren<ParticleSystem>();
 		lastThink = Time.time;
 		lastRetrograde = Time.time;
 	}
 
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 		
 		Vector2 oldTargetPos = targetPos;
 		Vector2 pos = new Vector2(transform.position.x, transform.position.y);
-
-		Debug.DrawLine(transform.position, new Vector3(targetPos.x,targetPos.y, 0), Color.blue, 0.1f, true);
+	
+		Debug.DrawLine(transform.position, new Vector3(targetPos.x, targetPos.y, 0), Color.blue, 0.1f, true);
 		Rigidbody2D r = this.GetComponent<Rigidbody2D>();
 		RaycastHit2D[] obstacles = Physics2D.LinecastAll(transform.position, targetPos);
 		bool obstructed = false;
-		for (int i=0;i<obstacles.Length;i++) {
+		for (int i = 0;i < obstacles.Length;i++) {
 			if (obstacles[i].collider.gameObject.GetComponent<Asteroid>()) {
 				obstructed = true;
 			}
 		}
-
-
-
-
+			
 		ControllableShip obj = (ControllableShip)GameObject.FindObjectOfType(typeof(ControllableShip));
-		if (!obj)return;
+		if (!obj)
+			return;
 		Vector2 tvel = obj.GetComponent<Rigidbody2D>().velocity;
 		Vector2 mvel = this.GetComponent<Rigidbody2D>().velocity;
 		Vector2 vdiff = (tvel - mvel);
@@ -90,8 +88,7 @@ public class Enemy : MonoBehaviour, IDamageable {
 		if (engineOn) {
 			r.AddForce(getEngineForce());
 			engineParticles.Play();
-		}
-		else {
+		} else {
 			engineParticles.Stop();
 		}
 	}
@@ -99,9 +96,9 @@ public class Enemy : MonoBehaviour, IDamageable {
 	Vector2 getEngineForce() {
 		//Get force that engine would apply for current rotation
 		Rigidbody2D r = this.GetComponent<Rigidbody2D>();
-		float x = Mathf.Cos ((r.rotation - 90) * Mathf.Deg2Rad) * forwardSpeed;
-		float y = Mathf.Sin ((r.rotation - 90) * Mathf.Deg2Rad) * forwardSpeed;
-		return new Vector2(x,y);
+		float x = Mathf.Cos((r.rotation - 90) * Mathf.Deg2Rad) * forwardSpeed;
+		float y = Mathf.Sin((r.rotation - 90) * Mathf.Deg2Rad) * forwardSpeed;
+		return new Vector2(x, y);
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
@@ -111,21 +108,23 @@ public class Enemy : MonoBehaviour, IDamageable {
 	}
 
 	public void takeDamage(int damage) {
+		if (this.health <= 0)
+			return;
 		this.health -= damage;
 		if (this.health <= 0) {
-			Explosion prefab = (Explosion)Resources.Load ("Prefabs/ExplosionMedium", typeof(Explosion));
+			Explosion prefab = (Explosion)Resources.Load("Prefabs/ExplosionMedium", typeof(Explosion));
 			Instantiate(prefab, transform.position, Quaternion.identity);
-			Game.eventManager.dispatch ("ENEMY_DESTROYED", this);
+			Game.eventManager.dispatch("ENEMY_DESTROYED", this);
 
-			GameObject prefab2 = (GameObject)Resources.Load ("Prefabs/RandomPowerUp", typeof(GameObject));
+			GameObject prefab2 = (GameObject)Resources.Load("Prefabs/RandomPowerUp", typeof(GameObject));
 			Instantiate(prefab2, transform.position, Quaternion.identity);
-			Destroy(this.gameObject);
+			Destroy(this.gameObject); 
 		}
 	}
 
 	private void lookAt(Vector2 target) {
 		Vector2 dir = new Vector2(transform.position.x, transform.position.y) - target;
-		float r = Mathf.Atan2(dir.y,dir.x) * Mathf.Rad2Deg + 270;
-		gameObject.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0f,0f,r), Time.time * this.turnSpeedScale);
+		float r = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + 270;
+		gameObject.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0f, 0f, r), Time.time * this.turnSpeedScale);
 	}
 }

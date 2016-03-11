@@ -26,7 +26,7 @@ public class Game : MonoBehaviour {
 	public static EventDispatcher eventManager;
 
 	// Use this for initialization
-	void Awake () {
+	void Awake() {
 		Game.eventManager = new EventDispatcher();
 		waveStartTime = Time.time;
 
@@ -42,8 +42,7 @@ public class Game : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-
+	void Update() {
 		if (waveSpawns < waveTotalSpawns && Time.time - lastSpawnTime > spawnRate) {
 			spawnEnemy();
 			waveSpawns++;
@@ -66,7 +65,7 @@ public class Game : MonoBehaviour {
 			text.text = "";
 		}
 
-		ControllableShip[] players = (ControllableShip[])GameObject.FindObjectsOfType (typeof(ControllableShip));
+		ControllableShip[] players = (ControllableShip[])GameObject.FindObjectsOfType(typeof(ControllableShip));
 		if (players.Length == 0 && endTime == -1) {
 			endTime = Time.time;
 		}
@@ -76,7 +75,8 @@ public class Game : MonoBehaviour {
 	}
 
 	void spawnEnemy() {
-		if (!parent) return;
+		if (!parent)
+			return;
 		Vector2 pos = Random.insideUnitCircle;
 		pos.x *= maxSpawnRange;
 		pos.y *= maxSpawnRange;
@@ -88,7 +88,7 @@ public class Game : MonoBehaviour {
 			return;
 		}
 
-		Enemy prefab = (Enemy)Resources.Load ("Prefabs/Enemy", typeof(Enemy));
+		Enemy prefab = (Enemy)Resources.Load("Prefabs/Enemy", typeof(Enemy));
 		Enemy a = (Enemy)Instantiate(prefab, pos, Quaternion.identity);
 	}
 }
