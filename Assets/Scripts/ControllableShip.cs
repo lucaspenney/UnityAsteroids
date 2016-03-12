@@ -25,6 +25,7 @@ public class ControllableShip : MonoBehaviour, IDamageable {
 		shieldsSound = this.GetComponents<AudioSource>()[0];
 		engineSound = this.GetComponents<AudioSource>()[1];
 		engineParticles = this.GetComponentInChildren<ParticleSystem>();
+		rigidBody.velocity = new Vector3(0, 10f, 0);
 	}
 	
 	// Update is called once per frame
