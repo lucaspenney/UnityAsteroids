@@ -29,6 +29,9 @@ public class Projectile : MonoBehaviour {
 		IDamageable impacted = collision.gameObject.GetComponent<IDamageable>();
 		if (impacted != null) {
 			impacted.takeDamage(250);
+			if (collision.gameObject.GetComponent<Shield>() != null) {
+				AudioSource.PlayClipAtPoint((AudioClip)Resources.Load("sounds/shielddamage", typeof(AudioClip)), Camera.main.transform.position);
+			}
 		}
 		Explosion prefab = (Explosion)Resources.Load("Prefabs/ExplosionMedium2", typeof(Explosion));
 		Instantiate(prefab, collision.contacts[0].point, Quaternion.identity);

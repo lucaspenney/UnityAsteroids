@@ -32,6 +32,13 @@ public class Shield : MonoBehaviour, IDamageable {
 		} else {
 			renderer.sprite = null;
 		}
+
+		//Actually disabling the collider seems to cause rigidbody problems...so lets just make it too small to matter
+		if (this.health <= 0) {
+			this.GetComponent<CircleCollider2D>().radius = 0.01f;
+		} else {
+			this.GetComponent<CircleCollider2D>().radius = 0.6f;
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
@@ -43,11 +50,5 @@ public class Shield : MonoBehaviour, IDamageable {
 	public void takeDamage(int damage) {
 		this.health -= damage;
 		Game.eventManager.dispatch("SHIELD_TAKE_DAMAGE", this);
-		//Actually disabling the collider seems to cause rigidbody problems...so lets just make it too small to matter
-		if (this.health <= 0) {
-			this.GetComponent<CircleCollider2D>().radius = 0.01f;
-		} else {
-			this.GetComponent<CircleCollider2D>().radius = 0.6f;
-		}
 	}
 }
